@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgb(88, 88, 88);
+        }
+
+        .info {
+            position: relative;
+        }
+
+        .info-box {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: white;
+            width: 30rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba(0, 0, 0, .6);
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+        }
+
+        .info-box p {
+            text-indent: 1.6rem;
+            text-align: justify;
+            margin: 0;
+        }
+
+        .pre {
+            color: black;
+            text-align: center;
+            width: 10rem;
+            padding: 0.2rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 2px solid gray;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo {
+            height: 4rem;
+        }
+
+        .info span {
+            color: grey;
+            font-weight: bold;
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info" style="top: 10em;left: 8em;">
+        <div class="pre">人工智能与计算机学院</div>
+        <div class="info-box" txt="../ajax/texts/rgzn.html" img="../ajax/img/ai-logo.png">
+        </div>
+    </div>
+    <div class="info" style="top: 20em;left: 8em;">
+        <div class="pre">图书馆</div>
+        <div class="info-box" txt="../ajax/texts/tsg.html" img="../ajax/img/tsg-logo.png">
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.pre').on('click', function (event) {
+                // $box 即 .info-box
+                let $box = $(this).next();
+                // 如果 txt 属性或者 img 属性存在，就说明未发送 ajax
+                if ($box.attr('txt') || $box.attr('img')) {
+                    let url = $box.attr('txt');
+                    let img = $box.attr('img');
+                    getInfo(img, url, $box).then(() => {
+                        let span = $('<span>关闭</span>');
+                        span.on('click', () => {
+                            $box.fadeOut(100);
+                        });
+                        $box.prepend(span)
+                            .fadeIn(100)
+                            .removeAttr('txt')
+                            .removeAttr('img');
+                    });
+                }
+                else {
+                    $box.fadeIn(100);
+                }
+            });
+        });
+
+        async function getInfo(img, url, $jq) {
+            if (img != null) {
+                let res = await fetch(img);
+                let blob = await res.blob();
+
+                let imgUrl = URL.createObjectURL(blob);
+                let image = new Image();
+                image.className = 'logo';
+                image.src = imgUrl;
+                if ($jq.children('img').length == 0)
+                    $jq.append(image);
+            }
+            if (img != null && url != null)
+                $jq.append('<hr style="clear:both">');
+            if (url != null) {
+                let res2 = await fetch(url);
+                let txt = await res2.text();
+                if ($jq.children('p').length == 0)
+                    $jq.append(txt);
+            }
+        }
+    </script>
+</body>
+
+</html>
