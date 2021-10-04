@@ -179,8 +179,8 @@ function InitGroupShumei(code) {
         busLabel
     );
 
-    const helper = new THREE.AxesHelper(5);
-    scene.add(helper);
+    // const helper = new THREE.AxesHelper(5);
+    // scene.add(helper);
 
     groups[code] = smGroup;
     scene.background = cubemaps[code];
