@@ -179,8 +179,8 @@ function InitGroupShumei(code) {
         busLabel
     );
 
-    // const helper = new THREE.AxesHelper(5);
-    // scene.add(helper);
+    const helper = new THREE.AxesHelper(5);
+    scene.add(helper);
 
     groups[code] = smGroup;
     scene.background = cubemaps[code];
@@ -261,6 +261,19 @@ function InitGroupTsg(code) {
         new THREE.Vector3(18, -10, -5),
         tsgGroup,
         erjiaoLabel
+    );
+
+    // 理学院
+    const lxyLabel = new CSS2DObject(CreateInfoBlock(
+        './ajax/img/lxy-logo.png',
+        './ajax/texts/lxy.html',
+        '理学院',
+        0.8
+    ));
+    createLabel(
+        new THREE.Vector3(-5, -15, 25),
+        tsgGroup,
+        lxyLabel
     );
 
     groups[code] = tsgGroup;
