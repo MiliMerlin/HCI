@@ -60,6 +60,34 @@ $(function () {
         InitGroupTsg
     );
 
+    const tick = () => {
+        // 平滑改变视角
+        if (fov != camera.fov) {
+            camera.fov += (fov - camera.fov) * 0.05;
+            camera.updateProjectionMatrix();
+        }
+
+        if (sceneNeedsChenge) {
+            SceneFuncs[current](current);
+            sceneNeedsChenge = false;
+        }
+
+        controls.update();
+        renderer.render(scene, camera);
+        labelrenderer.render(scene, camera);
+        requestAnimationFrame(tick);
+    };
+    tick();
+
+    // 注册切换场景的函数
+    $('#change').on('click', () => {
+        sceneNeedsChenge = true;
+        scene.remove(groups[current]);
+        $('body>div:last-child').empty();
+        current++;
+        current %= SceneFuncs.length;
+    });
+
     // 通过按键改变视角
     $(document).on('keydown', function (event) {
         switch (event.key.toLocaleLowerCase()) {
@@ -84,39 +112,6 @@ $(function () {
             fov -= 10;
     });
 
-    // 注册切换场景的函数
-    $('#change').on('click', () => {
-        sceneNeedsChenge = true;
-        scene.remove(groups[current]);
-        $('body>div:last-child').empty();
-        current++;
-        current %= SceneFuncs.length;
-    });
-
-    const tick = () => {
-        // 平滑改变视角
-        if (fov != camera.fov) {
-            camera.fov += (fov - camera.fov) * 0.05;
-            camera.updateProjectionMatrix();
-        }
-
-        if (sceneNeedsChenge) {
-            camera.position.x = 3;
-            camera.position.y = 3;
-            camera.position.z = 3;
-            camera.fov = fov = 50;
-            camera.updateProjectionMatrix();
-
-            SceneFuncs[current](current);
-            sceneNeedsChenge = false;
-        }
-
-        controls.update();
-        renderer.render(scene, camera);
-        labelrenderer.render(scene, camera);
-        requestAnimationFrame(tick);
-    };
-    tick();
 });
 
 function InitGroupShumei(code) {
@@ -130,6 +125,48 @@ function InitGroupShumei(code) {
     const smGroup = new THREE.Group();
     smGroup.name = '人工智能与计算机学院';
 
+    function InitLabels() {
+
+        // shumei label
+        const shumeiLebel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/ai-logo.png',
+            './ajax/texts/rgzn.html',
+            '人工智能与计算机学院',
+            1.4
+        ));
+        createLabel(shumeiPos, smGroup, shumeiLebel);
+
+        // shang label
+        const sxyLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/sxy-logo.png',
+            './ajax/texts/sxy.html',
+            '商学院',
+            1.0
+        ));
+        createLabel(shangPos, smGroup, sxyLabel);
+
+        // erjiao label
+        const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 0.8));
+        createLabel(erjiaoPos, smGroup, erjiaoLabel);
+
+        // qingshi label
+        const qingshiLabel = new CSS2DObject(CreateInfo('宿舍', 1.2));
+        createLabel(qingshiPos, smGroup, qingshiLabel);
+
+        // shitang label
+        const shitangLabel = new CSS2DObject(CreateInfo('四食堂', 0.8));
+        createLabel(shitangPos, smGroup, shitangLabel);
+
+        // dahuang label
+        const busLabel = new CSS2DObject(CreateInfo('公交车站'), 0.8);
+        createLabel(
+            new THREE.Vector3(22, -25, -32),
+            smGroup,
+            busLabel
+        );
+
+    }
+
     if (!cubemaps[code]) {
         const path = './images/shumei/';
         const format = '.jpg';
@@ -137,53 +174,23 @@ function InitGroupShumei(code) {
         for (let i = 0; i < 6; i++) {
             urls.push(path + i + format);
         }
-        let cubeMap = new THREE.CubeTextureLoader().load(urls);
+        let cubeMap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+        });
         cubemaps[code] = cubeMap;
     }
-
-    // shumei label
-    const shumeiLebel = new CSS2DObject(CreateInfoBlock(
-        './ajax/img/ai-logo.png',
-        './ajax/texts/rgzn.html',
-        '人工智能与计算机学院',
-        1.4
-    ));
-    createLabel(shumeiPos, smGroup, shumeiLebel);
-
-    // shang label
-    const sxyLabel = new CSS2DObject(CreateInfoBlock(
-        './ajax/img/sxy-logo.png',
-        './ajax/texts/sxy.html',
-        '商学院',
-        1.0
-    ));
-    createLabel(shangPos, smGroup, sxyLabel);
-
-    // erjiao label
-    const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 0.8));
-    createLabel(erjiaoPos, smGroup, erjiaoLabel);
-
-    // qingshi label
-    const qingshiLabel = new CSS2DObject(CreateInfo('宿舍', 1.2));
-    createLabel(qingshiPos, smGroup, qingshiLabel);
-
-    // shitang label
-    const shitangLabel = new CSS2DObject(CreateInfo('四食堂', 0.8));
-    createLabel(shitangPos, smGroup, shitangLabel);
-
-    // dahuang label
-    const busLabel = new CSS2DObject(CreateInfo('公交车站'), 0.8);
-    createLabel(
-        new THREE.Vector3(22, -25, -32),
-        smGroup,
-        busLabel
-    );
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+    }
 
     const helper = new THREE.AxesHelper(5);
     scene.add(helper);
 
     groups[code] = smGroup;
-    scene.background = cubemaps[code];
     scene.add(smGroup);
 }
 
@@ -191,6 +198,82 @@ function InitGroupTsg(code) {
 
     const tsgGroup = new THREE.Group();
     tsgGroup.name = '图书馆';
+
+
+    function InitLabels() {
+
+        // 图书馆
+        const tsgLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/tsg-logo.png',
+            './ajax/texts/tsg.html',
+            '校图书馆',
+            1.4
+        ));
+        createLabel(
+            new THREE.Vector3(20, -20, 20),
+            tsgGroup,
+            tsgLabel
+        );
+
+        // 一教
+        const yjLabel = new CSS2DObject(CreateInfo('第一教学楼', 1.2));
+        createLabel(
+            new THREE.Vector3(0, -20, 20),
+            tsgGroup,
+            yjLabel
+        );
+
+        // 东门
+        const dmLabel = new CSS2DObject(CreateInfo('东大门', 1.0));
+        createLabel(
+            new THREE.Vector3(-18, -30, -18),
+            tsgGroup,
+            dmLabel
+        );
+
+        // ？馆
+        const whgLabel = new CSS2DObject(CreateInfo('文浩馆'), 1.0);
+        createLabel(
+            new THREE.Vector3(-15, -30, 5),
+            tsgGroup,
+            whgLabel
+        );
+
+        // 外国语
+        const wyLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/wy-logo.png',
+            './ajax/texts/wy.html',
+            '外国语学院',
+            1.2
+        ));
+        createLabel(
+            new THREE.Vector3(15, -20, -35),
+            tsgGroup,
+            wyLabel
+        );
+
+
+        // 二教
+        const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 1.0));
+        createLabel(
+            new THREE.Vector3(18, -10, -5),
+            tsgGroup,
+            erjiaoLabel
+        );
+
+        // 理学院
+        const lxyLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/lxy-logo.png',
+            './ajax/texts/lxy.html',
+            '理学院',
+            0.8
+        ));
+        createLabel(
+            new THREE.Vector3(-5, -15, 25),
+            tsgGroup,
+            lxyLabel
+        );
+    }
 
     // load cube map
     if (!cubemaps[code]) {
@@ -200,88 +283,23 @@ function InitGroupTsg(code) {
         for (let i = 0; i < 6; i++) {
             urls.push(path + i + format);
         }
-        let cubemap = new THREE.CubeTextureLoader().load(urls);
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+        });
         cubemaps[code] = cubemap;
     }
-
-    // 图书馆
-    const tsgLabel = new CSS2DObject(CreateInfoBlock(
-        './ajax/img/tsg-logo.png',
-        './ajax/texts/tsg.html',
-        '校图书馆',
-        1.4
-    ));
-    createLabel(
-        new THREE.Vector3(20, -20, 20),
-        tsgGroup,
-        tsgLabel
-    );
-
-    // 一教
-    const yjLabel = new CSS2DObject(CreateInfo('第一教学楼', 1.2));
-    createLabel(
-        new THREE.Vector3(0, -20, 20),
-        tsgGroup,
-        yjLabel
-    );
-
-    // 东门
-    const dmLabel = new CSS2DObject(CreateInfo('东大门', 1.0));
-    createLabel(
-        new THREE.Vector3(-18, -30, -18),
-        tsgGroup,
-        dmLabel
-    );
-
-    // ？馆
-    const whgLabel = new CSS2DObject(CreateInfo('文浩馆'), 1.0);
-    createLabel(
-        new THREE.Vector3(-15, -30, 5),
-        tsgGroup,
-        whgLabel
-    );
-
-    // 外国语
-    const wyLabel = new CSS2DObject(CreateInfoBlock(
-        './ajax/img/wy-logo.png',
-        './ajax/texts/wy.html',
-        '外国语学院',
-        1.2
-    ));
-    createLabel(
-        new THREE.Vector3(15, -20, -35),
-        tsgGroup,
-        wyLabel
-    );
-
-
-    // 二教
-    const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 1.0));
-    createLabel(
-        new THREE.Vector3(18, -10, -5),
-        tsgGroup,
-        erjiaoLabel
-    );
-
-    // 理学院
-    const lxyLabel = new CSS2DObject(CreateInfoBlock(
-        './ajax/img/lxy-logo.png',
-        './ajax/texts/lxy.html',
-        '理学院',
-        0.8
-    ));
-    createLabel(
-        new THREE.Vector3(-5, -15, 25),
-        tsgGroup,
-        lxyLabel
-    );
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+    }
 
     groups[code] = tsgGroup;
-    scene.background = cubemaps[code];
     scene.add(tsgGroup);
+
 }
-
-
 
 // 创建信息显示条
 function CreateInfoBlock(imgURL, txtURL, txt, fontSize = 1.0) {
@@ -355,4 +373,13 @@ function createLabel(pos, group, css2d) {
     group.add(obj);
     css2d.position.copy(pos);
     obj.add(css2d);
+}
+
+// 更新相机
+function UpdateCamera() {
+    camera.position.x = 3;
+    camera.position.y = 3;
+    camera.position.z = 3;
+    camera.fov = fov = 50;
+    camera.updateProjectionMatrix();
 }
