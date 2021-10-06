@@ -57,7 +57,8 @@ $(function () {
 
     SceneFuncs.push(
         InitGroupShumei,
-        InitGroupTsg
+        InitGroupTsg,
+        InitGroupBq
     );
 
     const tick = () => {
@@ -299,6 +300,40 @@ function InitGroupTsg(code) {
     groups[code] = tsgGroup;
     scene.add(tsgGroup);
 
+}
+
+function InitGroupBq(code) {
+
+    const BqGroup = new THREE.Group();
+    BqGroup.name = '北区';
+
+    function InitLabels() {
+
+    }
+
+    // load cube map
+    if (!cubemaps[code]) {
+        const path = './images/bq/';
+        const format = '.jpg';
+        const urls = [];
+        for (let i = 0; i < 6; i++) {
+            urls.push(path + i + format);
+        }
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+        });
+        cubemaps[code] = cubemap;
+    }
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+    }
+
+    groups[code] = BqGroup;
+    scene.add(BqGroup);
 }
 
 // 创建信息显示条
