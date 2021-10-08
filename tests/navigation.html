@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .select-box {
+            color: white;
+
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            padding: 1rem;
+            width: 15%;
+            min-width: 10rem;
+
+            text-align: center;
+        }
+
+        .panel ul {
+            list-style: none;
+            display: none;
+        }
+
+        .panel li,
+        .flip {
+            background-color: rgba(0, 0, 0, 0.6);
+
+            width: 100%;
+            padding: 1rem 0;
+
+            cursor: pointer;
+
+            transition: background 0.2s ease;
+        }
+
+        .flip {
+            border-radius: 0 0 10px 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .panel li {
+            border-bottom: 1px solid gray;
+        }
+
+        .panel li:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .flip:hover,
+        .panel li:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="select-box">
+        <div class="panel">
+            <ul>
+                <li>人计学院</li>
+                <li>图书馆</li>
+                <li>北区学院</li>
+            </ul>
+        </div>
+        <div class="flip">场景列表</div>
+    </div>
+    <script>
+        $(function () {
+            $('.flip').on('click', function () {
+                $('.panel ul').slideToggle(150);
+            })
+        });
+    </script>
+</body>
+
+</html>

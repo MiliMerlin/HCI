@@ -97,6 +97,59 @@ html, body{
     cursor: pointer;
 }
 
+/* 场景切换 */
+.select-box {
+    color: white;
+
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    padding: 1rem;
+    width: 15%;
+    min-width: 10rem;
+
+    text-align: center;
+
+    z-index: 10;
+}
+
+.panel ul {
+    list-style: none;
+    display: none;
+}
+
+.panel li,
+.flip {
+    background-color: rgba(40, 40, 40, 0.8);
+
+    width: 100%;
+    padding: 1rem 0;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.flip {
+    border-radius: 0 0 10px 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+
+}
+
+.panel li {
+    border-bottom: 1px solid gray;
+}
+
+.panel li:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.flip:hover,
+.panel li:hover {
+    background-color: rgba(80, 80, 80, 0.8);
+}
+
 /* 免责声明 */
 .declare{
     margin: 1em 1em;

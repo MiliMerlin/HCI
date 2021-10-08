@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,13 +10,31 @@
     <link rel="stylesheet" href="style.css">
     <title>虚拟现实校园——江南大学</title>
 </head>
+
 <body>
     <p class="declare">图片素材来源：未知数工作室</p>
     <div class="btn">
-        <img id="zoom-in" src="https://img.icons8.com/ios/50/000000/plus--v1.png"/>
-        <img id="zoom-out" src="https://img.icons8.com/ios/50/000000/minus.png"/>
-        <img id="change" src="https://img.icons8.com/ios/50/000000/synchronize.png"/>
+        <img id="zoom-in" src="https://img.icons8.com/ios/50/000000/plus--v1.png" />
+        <img id="zoom-out" src="https://img.icons8.com/ios/50/000000/minus.png" />
+    </div>
+    <div class="select-box">
+        <div class="panel">
+            <ul>
+                <li value="0">人计学院</li>
+                <li value="1">图书馆</li>
+                <li value="2">北区学院</li>
+            </ul>
+        </div>
+        <div class="flip">场景列表</div>
     </div>
     <canvas id="webgl-canvas"></canvas>
 </body>
+<script>
+    $(function () {
+        $('.flip').on('click', function () {
+            $('.panel ul').slideToggle(150);
+        })
+    });
+</script>
+
 </html>

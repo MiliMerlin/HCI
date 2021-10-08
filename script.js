@@ -81,12 +81,18 @@ $(function () {
     tick();
 
     // 注册切换场景的函数
-    $('#change').on('click', () => {
-        sceneNeedsChenge = true;
-        scene.remove(groups[current]);
-        $('body>div:last-child').empty();
-        current++;
-        current %= SceneFuncs.length;
+    $('.panel li').on('click', function () {
+        let code = $(this).attr('value');
+
+        if (current != code) {
+            $('.panel ul').slideToggle(150, () => {
+                sceneNeedsChenge = true;
+                scene.remove(groups[current]);
+                $('body>div:last-child').empty();
+                current = code;
+            });
+        }
+
     });
 
     // 通过按键改变视角
