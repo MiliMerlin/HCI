@@ -13,6 +13,9 @@ let sceneNeedsChenge = true;
 let current = 0;
 let SceneFuncs = [];
 
+const imgPath = './ajax/img/';
+const txtPath = './ajax/texts/';
+
 function Init() {
     // scene & group
     scene = new THREE.Scene();
@@ -280,6 +283,14 @@ function InitGroupTsg(code) {
             tsgGroup,
             lxyLabel
         );
+
+        // 北体
+        const btLabel = new CSS2DObject(CreateInfo('北区体育中心', 0.8));
+        createLabel(
+            new THREE.Vector3(-20, -10, 22),
+            tsgGroup,
+            btLabel
+        );
     }
 
     // load cube map
@@ -314,7 +325,31 @@ function InitGroupBq(code) {
     BqGroup.name = '北区';
 
     function InitLabels() {
+        // 🐍院
+        const syLabel = new CSS2DObject(CreateInfoBlock(
+            imgPath + 'sy-logo.png',
+            txtPath + 'sy.html',
+            '设计学院',
+            1.2
+        ));
+        createLabel(
+            new THREE.Vector3(20, -5, -15),
+            BqGroup,
+            syLabel
+        );
 
+        // 机械
+        const jxLabel = new CSS2DObject(CreateInfoBlock(
+            imgPath + 'jx-logo.png',
+            txtPath + 'jx.html',
+            '机械工程学院',
+            1.2
+        ));
+        createLabel(
+            new THREE.Vector3(0, -2, -15),
+            BqGroup,
+            jxLabel
+        );
     }
 
     // load cube map
