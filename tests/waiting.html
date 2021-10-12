@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+
+        }
+
+        .change {
+            position: absolute;
+            background-color: black;
+            color: white;
+            text-align: center;
+
+            width: 100%;
+            height: 100%;
+
+            padding: 25% 0;
+
+            font-size: 1rem;
+            box-sizing: border-box;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="exchange" style="z-index: 10;">切换</button>
+    <script>
+        $(function () {
+            const $div = $('<div class="change"><p>Changing...</p></div>');
+            // $div.css('paddingTop', $div.height() / 2);
+
+            $('#exchange').on('click', () => {
+                $('body').prepend($div);
+                $div.fadeIn(100);
+
+                setTimeout(() => {
+                    $div.fadeOut(100);
+                }, 2000);
+            })
+
+            // window.addEventListener('resize', () => {
+            //     $div.css('paddingTop', $div.innerHeight() / 2);
+
+            // })
+        });
+    </script>
+</body>
+
+</html>

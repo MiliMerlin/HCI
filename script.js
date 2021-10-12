@@ -85,9 +85,13 @@ $(function () {
 
     // 注册切换场景的函数
     $('.panel li').on('click', function () {
-        let code = $(this).attr('value');
 
+        let code = $(this).attr('value');
         if (current != code) {
+            let $div = $('<div class="change">正在切换场景...</div>');
+            $('body').prepend($div);
+            $($div).fadeIn(100);
+
             $('.panel ul').slideToggle(150, () => {
                 sceneNeedsChenge = true;
                 scene.remove(groups[current]);
@@ -188,6 +192,12 @@ function InitGroupShumei(code) {
             scene.background = cubemaps[code];
             UpdateCamera();
             InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(100, function () {
+                    $(this).remove();
+                });
+            }, 500);
         });
         cubemaps[code] = cubeMap;
     }
@@ -195,6 +205,10 @@ function InitGroupShumei(code) {
         scene.background = cubemaps[code];
         UpdateCamera();
         InitLabels();
+
+        $('.change').fadeOut(100, function () {
+            $(this).remove();
+        });
     }
 
     const helper = new THREE.AxesHelper(5);
@@ -305,6 +319,12 @@ function InitGroupTsg(code) {
             scene.background = cubemaps[code];
             UpdateCamera();
             InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(100, function () {
+                    $(this).remove();
+                });
+            }, 500);
         });
         cubemaps[code] = cubemap;
     }
@@ -312,6 +332,10 @@ function InitGroupTsg(code) {
         scene.background = cubemaps[code];
         UpdateCamera();
         InitLabels();
+
+        $('.change').fadeOut(100, function () {
+            $(this).remove();
+        });
     }
 
     groups[code] = tsgGroup;
@@ -350,6 +374,27 @@ function InitGroupBq(code) {
             BqGroup,
             jxLabel
         );
+
+        // 物联网
+        const wlwLabel = new CSS2DObject(CreateInfoBlock(
+            imgPath + 'wlw-logo.png',
+            txtPath + 'wlw.html',
+            '物联网工程学院',
+            1.2
+        ));
+        createLabel(
+            new THREE.Vector3(-20, -3, -5),
+            BqGroup,
+            wlwLabel
+        );
+
+        // 北区体育中心
+        const btLabel = new CSS2DObject(CreateInfo('北区体育中心', 1.0));
+        createLabel(
+            new THREE.Vector3(30, -5, 30),
+            BqGroup,
+            btLabel
+        );
     }
 
     // load cube map
@@ -364,6 +409,13 @@ function InitGroupBq(code) {
             scene.background = cubemaps[code];
             UpdateCamera();
             InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(100, function () {
+                    $(this).remove();
+                });
+            }, 500);
+
         });
         cubemaps[code] = cubemap;
     }
@@ -371,6 +423,10 @@ function InitGroupBq(code) {
         scene.background = cubemaps[code];
         UpdateCamera();
         InitLabels();
+
+        $('.change').fadeOut(100, function () {
+            $(this).remove();
+        });
     }
 
     groups[code] = BqGroup;
