@@ -1,6 +1,7 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 import { OrbitControls } from './jsm/OrbitControls.js';
 import { CSS2DObject, CSS2DRenderer } from './jsm/CSS2DRenderer.js';
+import {CreateInfoBlock, CreateInfo} from './jsm/common.js';
 
 let scene, camera, renderer, labelrenderer;
 let fov = 50;
@@ -12,6 +13,9 @@ let groups = [];
 let sceneNeedsChenge = true;
 let current = 0;
 let SceneFuncs = [];
+
+let isChanging = false;
+let isFirst = true;
 
 const imgPath = './ajax/img/';
 const txtPath = './ajax/texts/';
@@ -82,59 +86,10 @@ $(function () {
         requestAnimationFrame(tick);
     };
     tick();
-
-    // 注册切换场景的函数
-    $('.panel li').on('click', function () {
-
-        let code = $(this).attr('value');
-        if (current != code) {
-            let $div = $('<div class="change">正在切换场景...</div>');
-            $('body').prepend($div);
-            $($div).fadeIn(100);
-
-            $('.panel ul').slideToggle(150, () => {
-                sceneNeedsChenge = true;
-                scene.remove(groups[current]);
-                $('body>div:last-child').empty();
-                current = code;
-            });
-        }
-
-    });
-
-    // 通过按键改变视角
-    $(document).on('keydown', function (event) {
-        switch (event.key.toLocaleLowerCase()) {
-            case 's':
-                if (fov < 80)
-                    fov += 10;
-                break;
-            case 'w':
-                if (fov > 30)
-                    fov -= 10;
-                break;
-            default:
-                break;
-        }
-    });
-    $('#zoom-out').on('click', () => {
-        if (fov < 80)
-            fov += 10;
-    });
-    $('#zoom-in').on('click', () => {
-        if (fov > 30)
-            fov -= 10;
-    });
-
 });
 
+// 第一个场景
 function InitGroupShumei(code) {
-
-    const shumeiPos = new THREE.Vector3(0, -10, 40),
-        shangPos = new THREE.Vector3(50, -10, 90),
-        erjiaoPos = new THREE.Vector3(100, -10, 50),
-        qingshiPos = new THREE.Vector3(10, -15, -50),
-        shitangPos = new THREE.Vector3(-100, -25, -180);
 
     const smGroup = new THREE.Group();
     smGroup.name = '人工智能与计算机学院';
@@ -148,7 +103,7 @@ function InitGroupShumei(code) {
             '人工智能与计算机学院',
             1.4
         ));
-        createLabel(shumeiPos, smGroup, shumeiLebel);
+        createLabel(new THREE.Vector3(0, -10, 40), smGroup, shumeiLebel);
 
         // shang label
         const sxyLabel = new CSS2DObject(CreateInfoBlock(
@@ -157,19 +112,19 @@ function InitGroupShumei(code) {
             '商学院',
             1.0
         ));
-        createLabel(shangPos, smGroup, sxyLabel);
+        createLabel(new THREE.Vector3(50, -10, 90), smGroup, sxyLabel);
 
         // erjiao label
         const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 0.8));
-        createLabel(erjiaoPos, smGroup, erjiaoLabel);
+        createLabel(new THREE.Vector3(100, -10, 50), smGroup, erjiaoLabel);
 
         // qingshi label
         const qingshiLabel = new CSS2DObject(CreateInfo('宿舍', 1.2));
-        createLabel(qingshiPos, smGroup, qingshiLabel);
+        createLabel(new THREE.Vector3(10, -15, -50), smGroup, qingshiLabel);
 
         // shitang label
         const shitangLabel = new CSS2DObject(CreateInfo('四食堂', 0.8));
-        createLabel(shitangPos, smGroup, shitangLabel);
+        createLabel(new THREE.Vector3(-100, -25, -180), smGroup, shitangLabel);
 
         // dahuang label
         const busLabel = new CSS2DObject(CreateInfo('公交车站'), 0.8);
@@ -194,10 +149,16 @@ function InitGroupShumei(code) {
             InitLabels();
 
             setTimeout(() => {
-                $('.change').fadeOut(100, function () {
+                $('.change').fadeOut(200, function () {
                     $(this).remove();
                 });
+                isChanging = false;
             }, 500);
+
+            if(isFirst){
+                isFirst = false;
+                SubscribeEvents();
+            }
         });
         cubemaps[code] = cubeMap;
     }
@@ -208,11 +169,12 @@ function InitGroupShumei(code) {
 
         $('.change').fadeOut(100, function () {
             $(this).remove();
+            isChanging = false;
         });
     }
 
-    const helper = new THREE.AxesHelper(5);
-    scene.add(helper);
+    // const helper = new THREE.AxisHelper(5);
+    // scene.add(helper);
 
     groups[code] = smGroup;
     scene.add(smGroup);
@@ -305,6 +267,14 @@ function InitGroupTsg(code) {
             tsgGroup,
             btLabel
         );
+
+        // 曲水桥
+        const qsqLabel = new CSS2DObject(CreateInfo('曲水桥'), 0.8);
+        createLabel(
+            new THREE.Vector3(27, -15, 8),
+            tsgGroup,
+            qsqLabel
+        );
     }
 
     // load cube map
@@ -321,9 +291,10 @@ function InitGroupTsg(code) {
             InitLabels();
 
             setTimeout(() => {
-                $('.change').fadeOut(100, function () {
+                $('.change').fadeOut(200, function () {
                     $(this).remove();
                 });
+                isChanging = false;
             }, 500);
         });
         cubemaps[code] = cubemap;
@@ -335,6 +306,7 @@ function InitGroupTsg(code) {
 
         $('.change').fadeOut(100, function () {
             $(this).remove();
+            isChanging = false;
         });
     }
 
@@ -411,11 +383,11 @@ function InitGroupBq(code) {
             InitLabels();
 
             setTimeout(() => {
-                $('.change').fadeOut(100, function () {
+                $('.change').fadeOut(200, function () {
                     $(this).remove();
                 });
+                isChanging = false;
             }, 500);
-
         });
         cubemaps[code] = cubemap;
     }
@@ -426,76 +398,12 @@ function InitGroupBq(code) {
 
         $('.change').fadeOut(100, function () {
             $(this).remove();
+            isChanging = false;
         });
     }
 
     groups[code] = BqGroup;
     scene.add(BqGroup);
-}
-
-// 创建信息显示条
-function CreateInfoBlock(imgURL, txtURL, txt, fontSize = 1.0) {
-    // 添加父元素，确定字体大小
-    let $div = $(`<div class="info" style="font-size:${fontSize}em"></div>`);
-
-    // 添加简介信息，添加鼠标 hover 事件
-    let $pre = $(`<div class="pre clickable" style="cursor: pointer">${txt}<div>`)
-    $pre.hover(function () {
-        $(this).css('background', 'rgba(80, 80, 80, 0.6)');
-    }, function () {
-        $(this).css('background', 'rgba(0, 0, 0, 0.6)');
-    });
-
-    $div.append($pre);
-
-    // 添加详细信息
-    let $infoBox = $('<div class="info-box"></div>');
-    $infoBox.attr("img", imgURL);
-    $infoBox.attr("txt", txtURL);
-    $div.append($infoBox);
-
-    $pre.on('click', function () {
-        // 动态加载图片和文字
-        if ($infoBox.attr('txt') || $infoBox.attr('img')) {
-            (async () => {
-                let imgRes = await fetch(imgURL);
-                let objURL = URL.createObjectURL(await imgRes.blob());
-
-                let image = new Image();
-                image.src = objURL;
-                image.className = 'logo';
-
-                if ($infoBox.children('img').length == 0)
-                    $infoBox.append(image);
-
-                $infoBox.append('<hr>');
-
-                let texts = await fetch(txtURL);
-                if ($infoBox.children('p').length == 0)
-                    $infoBox.append(await texts.text());
-            })().then(() => {
-                let $span = $('<span class="close">关闭</span>');
-                $span.on('click', () => {
-                    $infoBox.hide();
-                    $pre.show();
-                });
-                $pre.hide();
-                $infoBox.prepend($span).fadeIn(100)
-                    .removeAttr('txt').removeAttr('img');
-            });
-        }
-        else {
-            $infoBox.fadeIn(100);
-            $pre.hide();
-        }
-    });
-    return $div[0];
-}
-
-// 创建单个信息显示条
-function CreateInfo(txt, fontSize = 1.0) {
-    let div = $(`<div class="pre" style="font-size:${fontSize}em">${txt}</div>`);
-    return div[0];
 }
 
 // 创建 CSS2D 标签
@@ -514,4 +422,51 @@ function UpdateCamera() {
     camera.position.z = 3;
     camera.fov = fov = 50;
     camera.updateProjectionMatrix();
+}
+
+// 注册事件
+function SubscribeEvents() {
+    // 注册切换场景的函数
+    $('.panel li').on('click', function () {
+        if (!isChanging) {
+            let code = $(this).attr('value');
+            if (current != code) {
+                isChanging = true;
+                let $div = $('<div class="change">正在切换场景...</div>');
+                $('body').prepend($div);
+                $($div).fadeIn(200);
+
+                $('.panel ul').slideToggle(150, () => {
+                    sceneNeedsChenge = true;
+                    scene.remove(groups[current]);
+                    $('body>div:last-child').empty();
+                    current = code;
+                });
+            }
+        }
+    });
+
+    // 通过按键改变视角
+    $(document).on('keydown', function (event) {
+        switch (event.key.toLocaleLowerCase()) {
+            case 's':
+                if (fov < 80)
+                    fov += 10;
+                break;
+            case 'w':
+                if (fov > 30)
+                    fov -= 10;
+                break;
+            default:
+                break;
+        }
+    });
+    $('#zoom-out').on('click', () => {
+        if (fov < 80)
+            fov += 10;
+    });
+    $('#zoom-in').on('click', () => {
+        if (fov > 30)
+            fov -= 10;
+    });
 }
