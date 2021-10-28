@@ -1,7 +1,7 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 import { OrbitControls } from './jsm/OrbitControls.js';
 import { CSS2DObject, CSS2DRenderer } from './jsm/CSS2DRenderer.js';
-import {CreateInfoBlock, CreateInfo} from './jsm/common.js';
+import { CreateInfoBlock, CreateInfo } from './jsm/common.js';
 
 let scene, camera, renderer, labelrenderer;
 let fov = 50;
@@ -26,9 +26,7 @@ function Init() {
 
     // camera
     camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, .1, 1000);
-    camera.position.x = 3;
-    camera.position.y = 3;
-    camera.position.z = 3;
+    camera.position.set(3.0, 3.0, 3.0);
     scene.add(camera);
 
     // controls
@@ -148,16 +146,25 @@ function InitGroupShumei(code) {
             UpdateCamera();
             InitLabels();
 
-            setTimeout(() => {
-                $('.change').fadeOut(200, function () {
-                    $(this).remove();
-                });
-                isChanging = false;
-            }, 500);
+            if (isFirst) {
 
-            if(isFirst){
                 isFirst = false;
                 SubscribeEvents();
+
+                setTimeout(() => {
+                    $('.change').fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                }, 500);
+
+            }
+            else {
+                setTimeout(() => {
+                    $('.change').fadeOut(200, function () {
+                        $(this).remove();
+                    });
+                    isChanging = false;
+                }, 500);
             }
         });
         cubemaps[code] = cubeMap;
@@ -167,7 +174,7 @@ function InitGroupShumei(code) {
         UpdateCamera();
         InitLabels();
 
-        $('.change').fadeOut(100, function () {
+        $('.change').fadeOut(200, function () {
             $(this).remove();
             isChanging = false;
         });
@@ -304,7 +311,7 @@ function InitGroupTsg(code) {
         UpdateCamera();
         InitLabels();
 
-        $('.change').fadeOut(100, function () {
+        $('.change').fadeOut(200, function () {
             $(this).remove();
             isChanging = false;
         });
@@ -396,7 +403,7 @@ function InitGroupBq(code) {
         UpdateCamera();
         InitLabels();
 
-        $('.change').fadeOut(100, function () {
+        $('.change').fadeOut(200, function () {
             $(this).remove();
             isChanging = false;
         });
@@ -417,9 +424,7 @@ function createLabel(pos, group, css2d) {
 
 // 更新相机
 function UpdateCamera() {
-    camera.position.x = 3;
-    camera.position.y = 3;
-    camera.position.z = 3;
+    camera.position.set(3.0, 3.0, 3.0);
     camera.fov = fov = 50;
     camera.updateProjectionMatrix();
 }
