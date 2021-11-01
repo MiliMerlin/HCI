@@ -63,7 +63,8 @@ $(function () {
     SceneFuncs.push(
         InitGroupShumei,
         InitGroupTsg,
-        InitGroupBq
+        InitGroupBq,
+        InitGroupTsgN
     );
 
     const tick = () => {
@@ -411,6 +412,141 @@ function InitGroupBq(code) {
 
     groups[code] = BqGroup;
     scene.add(BqGroup);
+}
+
+function InitGroupTsgN(code){
+    
+    const tsgGroup = new THREE.Group();
+    tsgGroup.name = '图书馆_夜';
+
+
+    function InitLabels() {
+
+        // 图书馆
+        const tsgLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/tsg-logo.png',
+            './ajax/texts/tsg.html',
+            '校图书馆',
+            1.4
+        ));
+        createLabel(
+            new THREE.Vector3(35, -20, 15),
+            tsgGroup,
+            tsgLabel
+        );
+
+        // // 一教
+        // const yjLabel = new CSS2DObject(CreateInfo('第一教学楼', 1.2));
+        // createLabel(
+        //     new THREE.Vector3(15, -20, 15),
+        //     tsgGroup,
+        //     yjLabel
+        // );
+
+        // 东门
+        const dmLabel = new CSS2DObject(CreateInfo('东大门', 1.0));
+        createLabel(
+            new THREE.Vector3(-3, -30, -13),
+            tsgGroup,
+            dmLabel
+        );
+
+        // ？馆
+        const whgLabel = new CSS2DObject(CreateInfo('文浩馆'), 1.0);
+        createLabel(
+            new THREE.Vector3(0, -30, 0),
+            tsgGroup,
+            whgLabel
+        );
+
+        // 外国语
+        const wyLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/wy-logo.png',
+            './ajax/texts/wy.html',
+            '外国语学院',
+            1.2
+        ));
+        createLabel(
+            new THREE.Vector3(30, -20, -40),
+            tsgGroup,
+            wyLabel
+        );
+
+
+        // 二教
+        const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 1.0));
+        createLabel(
+            new THREE.Vector3(30, -10, -10),
+            tsgGroup,
+            erjiaoLabel
+        );
+
+        // 理学院
+        const lxyLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/lxy-logo.png',
+            './ajax/texts/lxy.html',
+            '理学院',
+            0.8
+        ));
+        createLabel(
+            new THREE.Vector3(10, -15, 20),
+            tsgGroup,
+            lxyLabel
+        );
+
+        // // 北体
+        // const btLabel = new CSS2DObject(CreateInfo('北区体育中心', 0.8));
+        // createLabel(
+        //     new THREE.Vector3(-5, -10, 15),
+        //     tsgGroup,
+        //     btLabel
+        // );
+
+        // 曲水桥
+        const qsqLabel = new CSS2DObject(CreateInfo('曲水桥'), 0.8);
+        createLabel(
+            new THREE.Vector3(37, -15, 3),
+            tsgGroup,
+            qsqLabel
+        );
+    }
+
+    // load cube map
+    if (!cubemaps[code]) {
+        const path = './images/tsg_night/';
+        const format = '.jpg';
+        const urls = [];
+        for (let i = 0; i < 6; i++) {
+            urls.push(path + i + format);
+        }
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(200, function () {
+                    $(this).remove();
+                });
+                isChanging = false;
+            }, 500);
+        });
+        cubemaps[code] = cubemap;
+    }
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+
+        $('.change').fadeOut(200, function () {
+            $(this).remove();
+            isChanging = false;
+        });
+    }
+
+    groups[code] = tsgGroup;
+    scene.add(tsgGroup);
+
 }
 
 // 创建 CSS2D 标签
