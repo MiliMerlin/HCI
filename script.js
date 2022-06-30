@@ -583,6 +583,7 @@ function InitGroupTsgN(code) {
 
 }
 
+// 小岛场景
 function InitXiaoD(code) {
     const XdGroup = new THREE.Group();
     XdGroup.name = '小岛';
@@ -602,20 +603,49 @@ function InitXiaoD(code) {
             tsgLabel
         );
 
+        // 生工导航
+        const sgLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/sg-logo.png',
+            './ajax/texts/sg.html',
+            '生物工程学院',
+            1.4
+        ));
+        createLabel(
+            new THREE.Vector3(-15, 0, 0),
+            XdGroup,
+            sgLabel
+        );
+
         // 荷花导航
         const hehuaNavi = new CSS2DObject(CreateNavi('↑江大荷花↑', 5, 1.2));
         createLabel(
-            new THREE.Vector3(-10, -5, 5),
+            new THREE.Vector3(-10, -8, 3),
             XdGroup,
             hehuaNavi
         );
 
         // 北区学院导航
-        const bqNabi = new CSS2DObject(CreateNavi('↑北区学院↑', 2));
+        const bqNavi = new CSS2DObject(CreateNavi('↑北区学院↑', 2));
         createLabel(
             new THREE.Vector3(25, 0, -25),
             XdGroup,
-            bqNabi
+            bqNavi
+        );
+
+        // 赤马嘴
+        const cmz = new CSS2DObject(CreateInfo('赤马咀'));
+        createLabel(
+            new THREE.Vector3(-15, -5, 35),
+            XdGroup,
+            cmz
+        );
+
+        // 曲水桥
+        const qsq = new CSS2DObject(CreateInfo('曲水桥'));
+        createLabel(
+            new THREE.Vector3(15, -5, 35),
+            XdGroup,
+            qsq
         );
     }
 
@@ -657,6 +687,7 @@ function InitXiaoD(code) {
 
 }
 
+// 江大荷花
 function InitHehua(code) {
     const HehuaGroup = new THREE.Group();
     HehuaGroup.name = '荷花';
@@ -704,13 +735,40 @@ function InitHehua(code) {
 
 }
 
+// 北区球场
 function InitBq2(code) {
     const bq2Group = new THREE.Group();
     bq2Group.name = '北区2';
 
 
     function InitLabels() {
+        const yist = new CSS2DObject(CreateInfo('一食堂'));
+        createLabel(
+            new THREE.Vector3(8, -10, 8),
+            bq2Group,
+            yist
+        );
 
+        const beihuo = new CSS2DObject(CreateInfo('大学生活动中心'));
+        createLabel(
+            new THREE.Vector3(10, -10, -10),
+            bq2Group,
+            beihuo
+        );
+
+        const beiti = new CSS2DObject(CreateInfo('北区体育中心'));
+        createLabel(
+            new THREE.Vector3(-20, -10, -14),
+            bq2Group,
+            beiti
+        );
+
+        const tiyubu = new CSS2DObject(CreateInfo('体育部'));
+        createLabel(
+            new THREE.Vector3(-8, -10, -25),
+            bq2Group,
+            tiyubu
+        );
     }
 
     // load cube map
