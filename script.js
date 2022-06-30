@@ -64,7 +64,9 @@ $(function () {
         InitGroupShumei,
         InitGroupTsg,
         InitGroupBq,
-        InitGroupTsgN
+        InitGroupTsgN,
+        InitXiaoD,
+        InitHehua
     );
 
     const tick = () => {
@@ -87,7 +89,7 @@ $(function () {
     tick();
 });
 
-// 第一个场景
+// 人机学院
 function InitGroupShumei(code) {
 
     const smGroup = new THREE.Group();
@@ -133,6 +135,13 @@ function InitGroupShumei(code) {
             busLabel
         );
 
+        //图书馆导航
+        const tsgNavi = new CSS2DObject(CreateNavi('↑图书馆↑', 1, 0.8));
+        createLabel(
+            new THREE.Vector3(110, 10, 50),
+            smGroup,
+            tsgNavi
+        );
     }
 
     if (!cubemaps[code]) {
@@ -181,8 +190,8 @@ function InitGroupShumei(code) {
         });
     }
 
-    // const helper = new THREE.AxisHelper(5);
-    // scene.add(helper);
+    const helper = new THREE.AxisHelper(5);
+    scene.add(helper);
 
     groups[code] = smGroup;
     scene.add(smGroup);
@@ -282,6 +291,22 @@ function InitGroupTsg(code) {
             new THREE.Vector3(27, -15, 8),
             tsgGroup,
             qsqLabel
+        );
+
+        // 湖心岛
+        const xdNavi = new CSS2DObject(CreateNavi('↑湖心岛↑', 4, 0.8));
+        createLabel(
+            new THREE.Vector3(27, -12, 18),
+            tsgGroup,
+            xdNavi
+        );
+
+        // 北区学院导航
+        const bqNabi = new CSS2DObject(CreateNavi('↑北区学院↑', 2, 0.8));
+        createLabel(
+            new THREE.Vector3(5, -5, 25),
+            tsgGroup,
+            bqNabi
         );
     }
 
@@ -414,8 +439,8 @@ function InitGroupBq(code) {
     scene.add(BqGroup);
 }
 
-function InitGroupTsgN(code){
-    
+function InitGroupTsgN(code) {
+
     const tsgGroup = new THREE.Group();
     tsgGroup.name = '图书馆_夜';
 
@@ -430,23 +455,23 @@ function InitGroupTsgN(code){
             1.4
         ));
         createLabel(
-            new THREE.Vector3(35, -20, 15),
+            new THREE.Vector3(35, -20, 12),
             tsgGroup,
             tsgLabel
         );
 
-        // // 一教
-        // const yjLabel = new CSS2DObject(CreateInfo('第一教学楼', 1.2));
-        // createLabel(
-        //     new THREE.Vector3(15, -20, 15),
-        //     tsgGroup,
-        //     yjLabel
-        // );
+        // 一教
+        const yjLabel = new CSS2DObject(CreateInfo('第一教学楼', 1.2));
+        createLabel(
+            new THREE.Vector3(15, -20, 25),
+            tsgGroup,
+            yjLabel
+        );
 
         // 东门
         const dmLabel = new CSS2DObject(CreateInfo('东大门', 1.0));
         createLabel(
-            new THREE.Vector3(-3, -30, -13),
+            new THREE.Vector3(-30, -25, -10),
             tsgGroup,
             dmLabel
         );
@@ -454,7 +479,7 @@ function InitGroupTsgN(code){
         // ？馆
         const whgLabel = new CSS2DObject(CreateInfo('文浩馆'), 1.0);
         createLabel(
-            new THREE.Vector3(0, -30, 0),
+            new THREE.Vector3(-20, -30, 10),
             tsgGroup,
             whgLabel
         );
@@ -467,7 +492,7 @@ function InitGroupTsgN(code){
             1.2
         ));
         createLabel(
-            new THREE.Vector3(30, -20, -40),
+            new THREE.Vector3(5, -15, -40),
             tsgGroup,
             wyLabel
         );
@@ -476,7 +501,7 @@ function InitGroupTsgN(code){
         // 二教
         const erjiaoLabel = new CSS2DObject(CreateInfo('第二教学楼', 1.0));
         createLabel(
-            new THREE.Vector3(30, -10, -10),
+            new THREE.Vector3(16, -10, -18),
             tsgGroup,
             erjiaoLabel
         );
@@ -489,23 +514,23 @@ function InitGroupTsgN(code){
             0.8
         ));
         createLabel(
-            new THREE.Vector3(10, -15, 20),
+            new THREE.Vector3(0, -10, 30),
             tsgGroup,
             lxyLabel
         );
 
-        // // 北体
-        // const btLabel = new CSS2DObject(CreateInfo('北区体育中心', 0.8));
-        // createLabel(
-        //     new THREE.Vector3(-5, -10, 15),
-        //     tsgGroup,
-        //     btLabel
-        // );
+        // 北体
+        const btLabel = new CSS2DObject(CreateInfo('北区体育中心', 0.8));
+        createLabel(
+            new THREE.Vector3(-5, -2.5, 15),
+            tsgGroup,
+            btLabel
+        );
 
         // 曲水桥
         const qsqLabel = new CSS2DObject(CreateInfo('曲水桥'), 0.8);
         createLabel(
-            new THREE.Vector3(37, -15, 3),
+            new THREE.Vector3(37, -15, -5),
             tsgGroup,
             qsqLabel
         );
@@ -546,6 +571,119 @@ function InitGroupTsgN(code){
 
     groups[code] = tsgGroup;
     scene.add(tsgGroup);
+
+}
+
+function InitXiaoD(code) {
+    const XdGroup = new THREE.Group();
+    XdGroup.name = '小岛';
+
+
+    function InitLabels() {
+        // 图书馆
+        const tsgLabel = new CSS2DObject(CreateInfoBlock(
+            './ajax/img/tsg-logo.png',
+            './ajax/texts/tsg.html',
+            '校图书馆',
+            1.4
+        ));
+        createLabel(
+            new THREE.Vector3(30, 5, 20),
+            XdGroup,
+            tsgLabel
+        );
+
+        // 荷花导航
+        const hehuaNavi = new CSS2DObject(CreateNavi('↑江大荷花↑', 5, 1.2));
+        createLabel(
+            new THREE.Vector3(-10, -5, 5),
+            XdGroup,
+            hehuaNavi
+        );
+    }
+
+    // load cube map
+    if (!cubemaps[code]) {
+        const path = './images/xiaodao/';
+        const format = '.jpg';
+        const urls = [];
+        for (let i = 0; i < 6; i++) {
+            urls.push(path + i + format);
+        }
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(200, function () {
+                    $(this).remove();
+                });
+                isChanging = false;
+            }, 500);
+        });
+        cubemaps[code] = cubemap;
+    }
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+
+        $('.change').fadeOut(200, function () {
+            $(this).remove();
+            isChanging = false;
+        });
+    }
+
+    groups[code] = XdGroup;
+    scene.add(XdGroup);
+
+}
+
+function InitHehua(code) {
+    const HehuaGroup = new THREE.Group();
+    HehuaGroup.name = '荷花';
+
+
+    function InitLabels() {
+
+    }
+
+    // load cube map
+    if (!cubemaps[code]) {
+        const path = './images/hehua/';
+        const format = '.jpg';
+        const urls = [];
+        for (let i = 0; i < 6; i++) {
+            urls.push(path + i + format);
+        }
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(200, function () {
+                    $(this).remove();
+                });
+                isChanging = false;
+            }, 500);
+        });
+        cubemaps[code] = cubemap;
+    }
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+
+        $('.change').fadeOut(200, function () {
+            $(this).remove();
+            isChanging = false;
+        });
+    }
+
+    groups[code] = HehuaGroup;
+    scene.add(HehuaGroup);
 
 }
 
@@ -610,4 +748,35 @@ function SubscribeEvents() {
         if (fov > 30)
             fov -= 10;
     });
+}
+
+// 设置导航板块
+function CreateNavi(txt, SceneCode, fontSize = 1.0) {
+    // 添加简介信息，添加鼠标 hover 事件
+    let $pre = $(`<div class="pre clickable" style="cursor: pointer;font-size:${fontSize}em;color:lightblue" value=${SceneCode}>${txt}<div>`)
+    $pre.hover(function () {
+        $(this).css('background', 'rgba(80, 80, 80, 0.6)');
+    }, function () {
+        $(this).css('background', 'rgba(0, 0, 0, 0.6)');
+    });
+
+    // 注册切换场景的函数
+    $pre.on('click', function () {
+        if (!isChanging) {
+            let code = $(this).attr('value');
+            if (current != code) {
+                isChanging = true;
+                let $div = $('<div class="change">正在切换场景...</div>');
+                $('body').prepend($div);
+
+                $($div).fadeIn(200, () => {
+                    sceneNeedsChenge = true;
+                    scene.remove(groups[current]);
+                    $('body>div:last-child').empty();
+                    current = code;
+                });
+            }
+        }
+    });
+    return $pre[0];
 }

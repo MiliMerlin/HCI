@@ -61,7 +61,7 @@ function CreateInfo(txt, fontSize = 1.0) {
     return div[0];
 }
 
-export{
+export {
     CreateInfoBlock,
     CreateInfo
 };
