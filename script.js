@@ -66,7 +66,8 @@ $(function () {
         InitGroupBq,
         InitGroupTsgN,
         InitXiaoD,
-        InitHehua
+        InitHehua,
+        InitBq2
     );
 
     const tick = () => {
@@ -400,6 +401,14 @@ function InitGroupBq(code) {
             BqGroup,
             btLabel
         );
+
+        // 北区2导航
+        const bq2Navi = new CSS2DObject(CreateNavi('↑北区球场↑', 6));
+        createLabel(
+            new THREE.Vector3(40, 5, 20),
+            BqGroup,
+            bq2Navi
+        );
     }
 
     // load cube map
@@ -600,6 +609,14 @@ function InitXiaoD(code) {
             XdGroup,
             hehuaNavi
         );
+
+        // 北区学院导航
+        const bqNabi = new CSS2DObject(CreateNavi('↑北区学院↑', 2));
+        createLabel(
+            new THREE.Vector3(25, 0, -25),
+            XdGroup,
+            bqNabi
+        );
     }
 
     // load cube map
@@ -684,6 +701,53 @@ function InitHehua(code) {
 
     groups[code] = HehuaGroup;
     scene.add(HehuaGroup);
+
+}
+
+function InitBq2(code) {
+    const bq2Group = new THREE.Group();
+    bq2Group.name = '北区2';
+
+
+    function InitLabels() {
+
+    }
+
+    // load cube map
+    if (!cubemaps[code]) {
+        const path = './images/bq2/';
+        const format = '.jpg';
+        const urls = [];
+        for (let i = 0; i < 6; i++) {
+            urls.push(path + i + format);
+        }
+        let cubemap = new THREE.CubeTextureLoader().load(urls, () => {
+            scene.background = cubemaps[code];
+            UpdateCamera();
+            InitLabels();
+
+            setTimeout(() => {
+                $('.change').fadeOut(200, function () {
+                    $(this).remove();
+                });
+                isChanging = false;
+            }, 500);
+        });
+        cubemaps[code] = cubemap;
+    }
+    else {
+        scene.background = cubemaps[code];
+        UpdateCamera();
+        InitLabels();
+
+        $('.change').fadeOut(200, function () {
+            $(this).remove();
+            isChanging = false;
+        });
+    }
+
+    groups[code] = bq2Group;
+    scene.add(bq2Group);
 
 }
 
